@@ -68,7 +68,6 @@ abstract class UploadedFile(file: File) extends Traversable[Person] {
             }
             catch {
                 case ire: IllegalArgumentException => throw ParseException(ire.getMessage + " at line " + (number + 1))
-
             }
         }
     }
@@ -76,7 +75,7 @@ abstract class UploadedFile(file: File) extends Traversable[Person] {
     def validateHeader(header: Array[String]) {
         require(header.length.equals(Header.values.size),
             "Looks like you miss some columns. " +
-                "Please make sure first line has following headers:" + Header.values.mkString(","))
+                "Please make sure you have following headers:" + Header.values.mkString(","))
 
         validate(Header.Name, header(Header.Name.id))
         validate(Header.Address, header(Header.Address.id))
@@ -89,7 +88,4 @@ abstract class UploadedFile(file: File) extends Traversable[Person] {
             "Wrong header found. " + expected.toString() + " expected")
 
     }
-
-    case class ParseException(message: String) extends Exception(message)
-
 }
