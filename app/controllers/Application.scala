@@ -9,7 +9,6 @@ import play.api.libs.json.Json._
 object Application extends Controller {
 
     def index = Action {
-        //parse.multipartFormData val uploadedFile = new File("/tmp/picture")
         Ok(views.html.index())
     }
 
