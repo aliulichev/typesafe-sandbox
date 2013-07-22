@@ -26,9 +26,6 @@ abstract class UploadedFile(file: File) extends Traversable[Person] {
 
 
     private def parsePerson(line: Array[String]): Person = {
-        line.foreach{each => println(each)}
-        println("yoyyyyyyyyyyyyyyyyyyyyyyyyyyyy")
-
         require(line.size.equals(Header.values.size), "Information is incomplete")
         val name = line(Header.Name.id)
         val address = line(Header.Address.id)
