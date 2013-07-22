@@ -1,7 +1,8 @@
+package parsers
+
 import java.io.File
 import org.junit._
 import Assert._
-import parsers.CSVFile
 
 /**
  * Tests CSV file parser
@@ -12,8 +13,12 @@ import parsers.CSVFile
  */
 class CSVFileTest {
 
+
     @Test def testFileParsedSucessFully = {
-        val persons =  new CSVFile(new File("/Users/toha/Projects/ebay/AddressBook/test/Workbook2.csv"))
+
+        val url = this.getClass().getResource("Workbook2.csv");
+        val csv = new File(url.getFile());
+        val persons = new CsvFile(csv)
         assertEquals(7, persons.size);
     }
 }

@@ -9,7 +9,7 @@ import org.apache.commons.lang3.time.DateUtils
  * Date: 7/16/13
  * Time: 1:54 AM
  */
-class PNRFile(file: File) extends UploadedFile(file) {
+class PrnFile(file: File) extends UploadedFile(file) {
     var regions = List.empty[(Int, Int)]
 
     override def tokenize(line: String): Array[String] = {

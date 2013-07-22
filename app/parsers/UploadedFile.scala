@@ -4,6 +4,7 @@ import java.io.File
 import scala.io.Source
 import java.util.{Calendar, Date}
 import models.Person
+import java.util
 
 /**
  * Uploaded File base class defines the contract for the uploaded files of different formats
@@ -23,7 +24,11 @@ abstract class UploadedFile(file: File) extends Traversable[Person] {
         val Birthday = Value("Birthday")
     }
 
+
     private def parsePerson(line: Array[String]): Person = {
+        line.foreach{each => println(each)}
+        println("yoyyyyyyyyyyyyyyyyyyyyyyyyyyyy")
+
         require(line.size.equals(Header.values.size), "Information is incomplete")
         val name = line(Header.Name.id)
         val address = line(Header.Address.id)
@@ -38,7 +43,7 @@ abstract class UploadedFile(file: File) extends Traversable[Person] {
         require(phone.nonEmpty, "Phone cannot be empty")
         require(creditLimit.matches("^[\\d.]+$"), "Credit limit should be a numeric value.")
         require(birthday.nonEmpty, "Birthday cannot be empty")
-        var birthdate = parseBirthday(birthday);
+        val birthdate = parseBirthday(birthday);
         require(birthdate.before(Calendar.getInstance().getTime), "Birthday cannot be in the future")
 
         new Person(name, address, postcode, phone, BigDecimal(creditLimit), birthdate)
@@ -76,7 +81,16 @@ abstract class UploadedFile(file: File) extends Traversable[Person] {
             "Looks like you miss some columns. " +
                 "Please make sure first line has following headers:" + Header.values.mkString(","))
 
-        // Validate columns
+        validate(Header.Name, header(Header.Name.id))
+        validate(Header.Address, header(Header.Address.id))
+        validate(Header.Postcode, header(Header.Postcode.id))
+        validate(Header.Phone, header(Header.Phone.id))
+        validate(Header.CreditLimit, header(Header.CreditLimit.id))
+        validate(Header.Birthday, header(Header.Birthday.id))
+
+        def validate(expected:Header.Value, actual:String) = require(expected.toString().equals(actual),
+            "Wrong header found. " + expected.toString() + " expected")
+
     }
 
     case class ParseException(message: String) extends Exception(message)
