@@ -14,13 +14,7 @@ class CsvFile(file: File) extends UploadedFile(file) {
 
     // regexp handles cvs with quotes
     override def tokenize(line: String): Array[String] = line.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)").
-        map(_.replaceAll("\"", ""))
-
-    override def parseBirthday(birthday: String): Date = {
-        try DateUtils.parseDateStrictly(birthday, "dd/MM/yyyy") catch {
-            case pe: ParseException => throw new IllegalArgumentException("Date is not in dd/MM/yyyy format")
-        }
-    }
+        map(_.replaceAll("\"", "").trim)
 
     override def processHeader(header: String) = validateHeader(header.split(",").map(_.trim))
 }

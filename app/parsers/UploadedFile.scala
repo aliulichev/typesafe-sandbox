@@ -5,6 +5,7 @@ import scala.io.Source
 import java.util.{Calendar, Date}
 import models.Person
 import java.util
+import org.apache.commons.lang3.time.DateUtils
 
 /**
  * Uploaded File base class defines the contract for the uploaded files of different formats
@@ -38,11 +39,10 @@ abstract class UploadedFile(file: File) extends Traversable[Person] {
         require(address.nonEmpty, "Address cannot be empty")
         require(postcode.matches("\\d+\\s*\\w*"), "Postcode is invalid")
         require(phone.nonEmpty, "Phone cannot be empty")
-        require(creditLimit.matches("^[\\d.]+$"), "Credit limit should be a numeric value.")
+        require(creditLimit.matches("^[\\d.]+$"), "Credit limit should be a numeric value")
         require(birthday.nonEmpty, "Birthday cannot be empty")
         val birthdate = parseBirthday(birthday);
         require(birthdate.before(Calendar.getInstance().getTime), "Birthday cannot be in the future")
-
         new Person(name, address, postcode, phone, BigDecimal(creditLimit), birthdate)
     }
 
@@ -50,7 +50,11 @@ abstract class UploadedFile(file: File) extends Traversable[Person] {
     // Extension point. Template method
     def tokenize(line: String): Array[String]
 
-    def parseBirthday(birthday: String): Date
+    def parseBirthday(birthday: String): Date = {
+        try DateUtils.parseDateStrictly(birthday, "dd/MM/yyyy", "yyyyMMdd") catch {
+            case pe: java.text.ParseException => throw new IllegalArgumentException("Cannot parse Birthday")
+        }
+    }
 
     // Must be overriden if header validation or pre processing required
     def processHeader(header: String)

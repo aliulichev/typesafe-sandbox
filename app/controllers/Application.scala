@@ -13,7 +13,6 @@ object Application extends Controller {
     def index = Action {
         Ok(views.html.index())
     }
-
     def upload = Action(parse.multipartFormData) {
         request =>
             request.body.file("workbook").map {

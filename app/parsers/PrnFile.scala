@@ -32,7 +32,7 @@ class PrnFile(file: File) extends UploadedFile(file) {
 
         def positionOf(position: Header.Value): Int = {
             header.indexOf(position.toString) match {
-                case -1 => throw ParseException("Something went wrong. Please make sure you upload valid PNR file")
+                case -1 => throw ParseException("Cannot read your file. Please make sure you upload valid PNR file")
                 case _ => header.indexOf(position.toString)
             }
         }
@@ -40,7 +40,4 @@ class PrnFile(file: File) extends UploadedFile(file) {
     }
 
 
-    override def parseBirthday(birthday: String) = try DateUtils.parseDateStrictly(birthday, "yyyyMMdd") catch {
-        case pe: ParseException => throw new IllegalArgumentException("Date is not in yyyyMMdd format")
-    }
 }
